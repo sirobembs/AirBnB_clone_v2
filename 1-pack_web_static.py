@@ -1,22 +1,18 @@
 #!/usr/bin/python3
-"""
-Function that compress a folder
-"""
-
-
-from fabric.api import local
+""" Function that compress a folder """
 from datetime import datetime
-import os.path as file_path
+from fabric.api import local
+import os
 
 
 def do_pack():
-    """generates a tgz archive"""
     try:
-        time = datetime.now().strftime("%Y%m%d%H%M%S")
-        archive_file = "versions/web_static_{}.tgz".format(time)
-        if not file_path.exists("versions"):
-            local('mkdir -p versions')
-        local("tar -cvzf {} web_static".format(archive_file))
-        return archive_file
+        if not os.path.exists("versions"):
+            local('mkdir versions')
+        t = datetime.now()
+        f = "%Y%m%d%H%M%S"
+        archive_path = 'versions/web_static_{}.tgz'.format(t.strftime(f))
+        local('tar -cvzf {} web_static'.format(archive_path))
+        return archive_path
     except FileExistsError:
         return None
